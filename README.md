@@ -1,43 +1,46 @@
 # Task Manager Backend (Flask)
 
-A production-structured RESTful task management backend built using Flask and SQLAlchemy.  
-This project demonstrates clean architecture principles, database modeling, and REST API design.
+A RESTful task management backend system built with Flask and SQLAlchemy.
 
----
+## Overview
 
-##  Project Overview
-
-This backend system allows:
-
-- User creation and management
-- Task creation, updates, deletion, and retrieval
-- Structured user-to-task relationships
-- JSON-based API communication
-- Proper HTTP status codes and error handling
-
-The architecture follows backend best practices including modular design and route separation.
-
----
-
-##  Architecture
+This project demonstrates backend architectural principles including:
 
 - App Factory Pattern
-- Blueprint-based route separation
-- SQLAlchemy ORM models
-- One-to-Many database relationship (User → Tasks)
-- RESTful endpoint structure
-- Centralized database extension initialization
-
----
+- Blueprint route separation
+- Relational database modeling
+- One-to-many relationships
+- RESTful API design
+- Structured error handling
 
 ##  Tech Stack
 
-- Python 3
+- Python
 - Flask
 - Flask-SQLAlchemy
-- SQLite (default database)
-- REST API principles
+- SQLite (default)
+- REST API Architecture
 
----
+##  API Endpoints
 
-##  Project Structure
+### Users
+POST /users/
+
+### Tasks
+POST /tasks/
+GET /tasks/<id>
+PUT /tasks/<id>
+DELETE /tasks/<id>
+
+##  Database Design
+
+- User → One-to-Many → Task
+- Task includes status-based workflow management
+
+##  Run Locally
+
+1. Clone repo
+2. Install dependencies:
+   pip install -r requirements.txt
+3. Run:
+   python run.py
