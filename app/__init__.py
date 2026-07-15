@@ -53,8 +53,8 @@ def create_app(env=None):
 
 
 def _guard_against_default_secrets(app):
-    if app.config["SECRET_KEY"] == "dev-secret-change-me" or \
-       app.config["JWT_SECRET_KEY"] == "dev-jwt-secret-change-me":
+    if app.config["SECRET_KEY"] == "dev-secret-change-me-please-and-thank-you" or \
+       app.config["JWT_SECRET_KEY"] == "dev-jwt-secret-change-me-please-and-thank-you":
         raise RuntimeError(
             "Refusing to start in production with default secrets. "
             "Set SECRET_KEY and JWT_SECRET_KEY environment variables."

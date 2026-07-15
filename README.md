@@ -37,24 +37,38 @@ tests/
 run.py
 ```
 
-## Running locally
+## Running locally (without Docker)
 
 ```bash
 python -m venv venv
-source venv/bin/activate
-pip install -r requirements.txt
+source venv/bin/activate   # venv\Scripts\activate on Windows
+pip install -r requirements-dev.txt
 
-cp .env.example .env   # edit secrets if you want
+cp .env.example .env
 
 python run.py
 ```
 
-API runs on `http://localhost:5000`. Try it:
+## Running with Docker (app + Postgres)
+
+This runs the whole stack - Flask app and a real Postgres database - in
+containers, matching what production (EC2 + RDS) will look like.
 
 ```bash
-curl -X POST http://localhost:5000/auth/register \
-  -H "Content-Type: application/json" \
-  -d '{"name":"Solo","email":"solo@example.com","password":"testpassword123"}'
+docker compose up --build
+```
+
+API runs on `http://localhost:5000`. Postgres is on `localhost:5432` if you
+want to inspect it with a DB tool.
+
+Stop everything:
+```bash
+docker compose down
+```
+
+Stop and wipe the database too (fresh start):
+```bash
+docker compose down -v
 ```
 
 ## Running tests
@@ -80,7 +94,7 @@ pytest tests/ -v
 ## Roadmap
 
 - [x] Auth, validation, tests, logging
-- [ ] Dockerize + docker-compose (Postgres)
+- [x] Dockerize + docker-compose (Postgres)
 - [ ] Deploy to AWS (EC2 + RDS)
 - [ ] CloudWatch logging/alarms
 - [ ] GitHub Actions CI/CD

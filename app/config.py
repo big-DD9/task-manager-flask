@@ -8,14 +8,15 @@ load_dotenv()
 
 class Config:
     """Base config with settings shared across all environments."""
-    SECRET_KEY = os.getenv("SECRET_KEY", "dev-secret-change-me")
-    JWT_SECRET_KEY = os.getenv("JWT_SECRET_KEY", "dev-jwt-secret-change-me")
+    SECRET_KEY = os.getenv("SECRET_KEY", "dev-secret-change-me-please-and-thank-you")
+    JWT_SECRET_KEY = os.getenv("JWT_SECRET_KEY", "dev-jwt-secret-change-me-please-and-thank-you")
     JWT_ACCESS_TOKEN_EXPIRES = timedelta(hours=1)
     SQLALCHEMY_TRACK_MODIFICATIONS = False
-    SQLALCHEMY_DATABASE_URI = os.getenv(
-        "DATABASE_URL",
-        "sqlite:///task_manager.db"
-    )
+    # os.getenv's default only kicks in when the var is completely unset.
+    # An empty string (e.g. DATABASE_URL= in a .env file) still counts as
+    # "set", so we check for that explicitly instead of relying on getenv's
+    # built-in fallback - this bit us once already.
+    SQLALCHEMY_DATABASE_URI = os.getenv("DATABASE_URL") or "sqlite:///task_manager.db"
 
 
 class DevelopmentConfig(Config):

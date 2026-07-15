@@ -1,0 +1,46 @@
+services:
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: taskuser
+      POSTGRES_PASSWORD: taskpass
+      POSTGRES_DB: taskmanager
+    volumes:
+      # Named volume - Postgres's data survives `docker compose down` and
+      # container restarts, but not `docker compose down -v` (which wipes
+      # volumes too). Useful distinction if you ever need a clean slate.
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      # Exposed to your host machine too, so you could connect a DB tool
+      # (e.g. DBeaver, pgAdmin) directly to localhost:5432 if you want to
+      # poke around the data.
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U taskuser -d taskmanager"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  app:
+    build: .
+    restart: unless-stopped
+    ports:
+      - "5000:5000"
+    environment:
+      FLASK_ENV: production
+      DATABASE_URL: postgresql://taskuser:taskpass@db:5432/taskmanager
+      # In a real deployment these would come from a secrets manager, not
+      # be hardcoded here - fine for local Docker testing, not for EC2/prod.
+      SECRET_KEY: local-docker-secret-change-for-real-deployment
+      JWT_SECRET_KEY: local-docker-jwt-secret-change-for-real-deployment
+      LOG_LEVEL: INFO
+    depends_on:
+      db:
+        # Waits for Postgres to actually be ready to accept connections,
+        # not just for the container to start - the app would otherwise
+        # race Postgres's startup and crash trying to connect too early.
+        condition: service_healthy
+
+volumes:
+  postgres_data:
