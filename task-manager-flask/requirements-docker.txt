@@ -1,0 +1,6 @@
+# Used only inside the Docker image, which talks to Postgres (RDS in prod,
+# a local Postgres container in docker-compose). psycopg2-binary builds
+# cleanly here because the Linux image has the right build tools -
+# this is the exact thing that failed on Windows and why it's kept separate.
+-r requirements.txt
+psycopg2-binary==2.9.9

@@ -1,0 +1,6 @@
+# For local development/testing (e.g. on Windows) - no psycopg2 here,
+# since building it needs Postgres dev tools you likely don't have locally.
+# Local dev uses SQLite, so it isn't needed outside Docker.
+-r requirements.txt
+pytest==8.2.0
+pytest-flask==1.3.0
